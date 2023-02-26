@@ -1,4 +1,4 @@
-function rezFull = runKilosort3(imec, paths, varargin)
+function rezFull = runKilosort3(imec, paths, exp_template, varargin)
 
     p = inputParser();
     p.addParameter('saveDir', imec.pathRoot, @ischar);
@@ -10,10 +10,9 @@ function rezFull = runKilosort3(imec, paths, varargin)
         error('npy-matlab was not found on path');
     end
 
-    pathToYourConfigFile = paths.neuropixel.config;
-    run(fullfile(pathToYourConfigFile,'StandardConfig'))
+    ops = defaultConfig();
     ops.fproc   = fullfile(p.Results.workingDir, 'temp_wh.dat'); % proc file on a fast SSD
-    ops.chanMap = fullfile(pathToYourConfigFile, imec.channelMap.name);
+    ops.chanMap = getenv('KILOSORT_CONFIG_FILE');
 
     % main parameter changes from Kilosort2 to v2.5
     ops.sig        = 20;  % spatial smoothness constant for registration
@@ -24,7 +23,8 @@ function rezFull = runKilosort3(imec, paths, varargin)
     ops.Th       = [9 9];
 
 
-    ops.fig = false; % default avoid plotting in main loop, can be overriden as parameter to runkilosort3
+    ops.fig = true; % default avoid plotting in main loop, can be overriden as parameter to runkilosort3
+    ops.save_fig_path = fullfile(paths.raw_neuropixel_data,"plot-drifts",exp_template);
     ops.trange = [0 Inf];
 
     % custom params added locally

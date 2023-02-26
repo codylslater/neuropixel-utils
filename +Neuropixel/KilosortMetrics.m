@@ -322,6 +322,8 @@ classdef KilosortMetrics < handle
                 %                 m.spike_centroid = Neuropixel.Utils.TensorUtils.squeezeDims(sum(pc1weight .* spikeFeatureChannelPos, 2) ./ ...
                 %                     sum(pc1weight, 2), 2);
             end
+
+            
             
             % recompute template similarity from W and U in order to get best lags
             if ks.hasFeaturesLoaded && ~isempty(ks.W)
@@ -365,6 +367,10 @@ classdef KilosortMetrics < handle
             % K. find cluster center of mass
             m.cluster_centroid = Neuropixel.Utils.TensorUtils.linearCombinationAlongDimension(m.template_centroid, 1, ...
                 m.cluster_template_weight, 'replaceNaNWithZero', true); % needed in case any templates have nan centroid
+
+            % for kilosort3 just define the spike locations based on
+            % cluster locations
+            %m.spike_centroid = Neuropixel.Utils.computeSpikeCentroid_custom(m);
             
             % L. cluster waveforms
             progIncrFn('Cluster waveform');

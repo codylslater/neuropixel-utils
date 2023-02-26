@@ -1,4 +1,4 @@
-function rezFull = runKilosort2_modified(imec, varargin)
+function rezFull = runKilosort2_NEC(imec, paths, ops, varargin)
 
     p = inputParser();
     p.addParameter('saveDir', imec.pathRoot, @ischar);
@@ -10,8 +10,7 @@ function rezFull = runKilosort2_modified(imec, varargin)
         error('npy-matlab was not found on path');
     end
 
-    pathToYourConfigFile = paths.neuropixel.config;
-    run(fullfile(pathToYourConfigFile,'StandardConfig'))
+    ops = defaultConfig();
     %ops.fig = false; % default avoid plotting in main loop, can be overriden as parameter to runKilosort2
     ops.trange = [0 Inf];
 
